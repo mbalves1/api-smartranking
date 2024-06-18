@@ -12,6 +12,10 @@ export class PlayersService {
     await this.create(createPlayerDto);
   }
 
+  async getAllPlayers(): Promise<Player[]> {
+    return await this.players;
+  }
+
   private create(createPlayerDto: CreatePlayerDto): void {
     const { name, email, phoneNumber } = createPlayerDto;
     const player: Player = {
