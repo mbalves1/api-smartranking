@@ -16,6 +16,12 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "jsx": "preserve",
+    "checkJs": true,
+    "paths": {
+      "@nestjs/*": ["./node_modules/@nestjs/*"]
+    },
+    "lib": ["dom", "esnext"]
+  },
 }
