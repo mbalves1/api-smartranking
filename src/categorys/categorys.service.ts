@@ -1,3 +1,4 @@
+import { UpdateCategoryDto } from './dtos/update-category.dto';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 import {
   BadRequestException,
@@ -39,5 +40,16 @@ export class CategorysService {
       throw new NotFoundException('Category not founded');
     }
     return existCategory;
+  }
+
+  async updateCategory(
+    category: string,
+    updateCategoryDto: UpdateCategoryDto,
+  ): Promise<void> {
+    const categoryFounded = await this.categoryModel.findOne({ category });
+    if (!categoryFounded) {
+      throw new NotFoundException('Category not founded');
+    }
+    await this.categoryModel.findOneAndUpdate({ category }, updateCategoryDto);
   }
 }
