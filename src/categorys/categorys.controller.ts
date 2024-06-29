@@ -13,6 +13,11 @@ import { Category } from './interfaces/category.interface';
 import { CategorysService } from './categorys.service';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
 
+interface PlayerCategoryParams {
+  category: string;
+  idPlayer: string;
+}
+
 @Controller('api/v1/categorys')
 export class CategorysController {
   constructor(private readonly categoryService: CategorysService) {}
@@ -38,6 +43,7 @@ export class CategorysController {
   }
 
   @Put('/:category')
+  @UsePipes(ValidationPipe)
   async updateCategory(
     @Body() updateCategoryDto: UpdateCategoryDto,
     @Param('category') category: string,
@@ -46,5 +52,12 @@ export class CategorysController {
       category,
       updateCategoryDto,
     );
+  }
+
+  @Post('/:category/players/:idPlayer')
+  async addPlayerCategory(
+    @Param() params: PlayerCategoryParams,
+  ): Promise<void> {
+    return await this.categoryService.addPlayerCategory(params);
   }
 }
