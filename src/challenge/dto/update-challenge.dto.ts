@@ -1,4 +1,10 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateChallengeDto } from './create-challenge.dto';
+import { IsOptional } from 'class-validator';
+import { ChallengeStatus } from '../interfaces/challenge-status.enum';
 
-export class UpdateChallengeDto extends PartialType(CreateChallengeDto) {}
+export class UpdateChallengeDto {
+  @IsOptional()
+  dateHourChallenge: Date;
+
+  @IsOptional()
+  status: ChallengeStatus;
+}
