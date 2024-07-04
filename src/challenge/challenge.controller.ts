@@ -8,10 +8,12 @@ import {
   Delete,
   UsePipes,
   ValidationPipe,
+  Query,
 } from '@nestjs/common';
 import { ChallengeService } from './challenge.service';
 import { CreateChallengeDto } from './dto/create-challenge.dto';
 import { UpdateChallengeDto } from './dto/update-challenge.dto';
+import { Challenge } from './interfaces/challenge.interface';
 
 @Controller('api/v1/challenge')
 export class ChallengeController {
@@ -26,8 +28,12 @@ export class ChallengeController {
   }
 
   @Get()
-  findAll() {
-    return this.challengeService.findAll();
+  async getAllChallenges(
+    @Query('idPlayer') _id: string,
+  ): Promise<Array<Challenge>> {
+    return _id
+      ? await this.challengeService.getPlayerChallenge(_id)
+      : await this.challengeService.getAllChallenges();
   }
 
   @Get(':id')
