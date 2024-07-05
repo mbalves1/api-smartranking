@@ -79,4 +79,15 @@ export class CategorysService {
     categoryFounded.players.push(idPlayer);
     await this.categoryModel.findOneAndUpdate({ category }, categoryFounded);
   }
+
+  async consultPlayerCategory(idPlayer: any): Promise<Category> {
+    const players = await this.playersService.getAllPlayers();
+
+    const playerFilter = players.filter((player) => player._id == idPlayer);
+    if (playerFilter.length == 0) {
+      throw new BadRequestException('Player not founded');
+    }
+
+    return (await this.categoryModel.findOne().where('players')).in(idPlayer);
+  }
 }
