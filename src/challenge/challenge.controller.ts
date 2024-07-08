@@ -15,6 +15,7 @@ import { CreateChallengeDto } from './dto/create-challenge.dto';
 import { UpdateChallengeDto } from './dto/update-challenge.dto';
 import { Challenge } from './interfaces/challenge.interface';
 import { ChallengeStatusValidationPipe } from './pipes/challenge-status-validation.pipe';
+import { AssignChallengeMatchDto } from './dto/assign-challenge.dto';
 
 @Controller('api/v1/challenge')
 export class ChallengeController {
@@ -45,8 +46,19 @@ export class ChallengeController {
     await this.challengeService.updateChallenge(_id, updateChallengeDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.challengeService.remove(+id);
+  @Post('/:challenge/partida/')
+  async assignMatchChallenge(
+    @Body(ValidationPipe) assignChallengeMatchDto: AssignChallengeMatchDto,
+    @Param('challenge') _id: string,
+  ): Promise<void> {
+    return await this.challengeService.assignChallengeMatch(
+      _id,
+      assignChallengeMatchDto,
+    );
+  }
+
+  @Delete('/:id')
+  async deleteChallenge(@Param('_id') _id: string): Promise<void> {
+    await this.challengeService.deleteChallenge(_id);
   }
 }

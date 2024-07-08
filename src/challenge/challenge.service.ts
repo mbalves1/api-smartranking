@@ -11,6 +11,7 @@ import { Model } from 'mongoose';
 import { Challenge, Match } from './interfaces/challenge.interface';
 import { CategorysService } from 'src/categorys/categorys.service';
 import { ChallengeStatus } from './interfaces/challenge-status.enum';
+import { AssignChallengeMatchDto } from './dto/assign-challenge.dto';
 
 @Injectable()
 export class ChallengeService {
@@ -120,11 +121,45 @@ export class ChallengeService {
     await this.challengeModel.findOneAndUpdate({ _id }, { challengeFind });
   }
 
-  update(id: number, updateChallengeDto: UpdateChallengeDto) {
-    return `This action updates a #${id} challenge`;
+  async assignChallengeMatch(
+    _id: string,
+    assignChallengeMatchDto: AssignChallengeMatchDto,
+  ): Promise<void> {
+    const challengFind = await this.challengeModel.findById(_id);
+
+    if (!challengFind) {
+      throw new BadRequestException('Challenge not create');
+    }
+
+    //const playerFilter = challengFind.players.filter(
+    //(player) => player._id === assignChallengeMatchDto.def,
+    //);
+
+    //if (playerFilter.length == 0) {
+    //throw new BadRequestException('Winner not belong to challenge');
+    //    }
+
+    const matchCreated = new this.matchModel(assignChallengeMatchDto);
+    matchCreated.category = challengFind.category;
+    matchCreated.players = challengFind.players;
+    const result = await matchCreated.save();
+
+    challengFind.status = ChallengeStatus.REALIZED;
+    // challengFind.match = result._id;
+    console.log(result);
+    try {
+      await this.challengeModel.findOneAndUpdate({ _id }, { challengFind });
+    } catch (error) {
+      await this.matchModel.deleteOne({ _id: result._id });
+      throw new BadRequestException(`Challenge ${_id} not add`);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} challenge`;
+  async deleteChallenge(_id: string): Promise<void> {
+    const challengeFind = await this.challengeModel.findById(_id);
+    if (!challengeFind) {
+      throw new BadRequestException('Challenge not found!');
+    }
+    await this.challengeModel.findOneAndUpdate({ _id }, { challengeFind });
   }
 }
