@@ -3,8 +3,8 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
+  Put,
   Delete,
   UsePipes,
   ValidationPipe,
@@ -14,6 +14,7 @@ import { ChallengeService } from './challenge.service';
 import { CreateChallengeDto } from './dto/create-challenge.dto';
 import { UpdateChallengeDto } from './dto/update-challenge.dto';
 import { Challenge } from './interfaces/challenge.interface';
+import { ChallengeStatusValidationPipe } from './pipes/challenge-status-validation.pipe';
 
 @Controller('api/v1/challenge')
 export class ChallengeController {
@@ -28,25 +29,20 @@ export class ChallengeController {
   }
 
   @Get()
-  async getAllChallenges(
+  async getChallenges(
     @Query('idPlayer') _id: string,
   ): Promise<Array<Challenge>> {
     return _id
-      ? await this.challengeService.getPlayerChallenge(_id)
+      ? await this.challengeService.consultSinglePlayerChallenge(_id)
       : await this.challengeService.getAllChallenges();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.challengeService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateChallengeDto: UpdateChallengeDto,
-  ) {
-    return this.challengeService.update(+id, updateChallengeDto);
+  @Put('/:challenge')
+  async updateChallenge(
+    @Body(ChallengeStatusValidationPipe) updateChallengeDto: UpdateChallengeDto,
+    @Param('challenge') _id: string,
+  ): Promise<void> {
+    await this.challengeService.updateChallenge(_id, updateChallengeDto);
   }
 
   @Delete(':id')

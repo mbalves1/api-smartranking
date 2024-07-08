@@ -88,6 +88,6 @@ export class CategorysService {
       throw new BadRequestException('Player not founded');
     }
 
-    return (await this.categoryModel.findOne().where('players')).in(idPlayer);
+    return await this.categoryModel.findOne().where('players').in(idPlayer);
   }
 }
