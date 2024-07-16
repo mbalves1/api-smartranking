@@ -29,7 +29,7 @@ export class ChallengeService {
 
     createChallengeDto.players.map((playerDto) => {
       const playerFilter = players.filter(
-        (player) => player.id === playerDto.id,
+        (player) => player.id === playerDto._id,
       );
 
       if (playerFilter.length === 0) {
@@ -38,7 +38,11 @@ export class ChallengeService {
     });
 
     const requererIsPlayerMatch = await createChallengeDto.players.filter(
-      (player) => player.id == createChallengeDto.requester,
+      (player) => {
+        console.log(player);
+
+        return player._id === createChallengeDto.requester;
+      },
     );
 
     if (requererIsPlayerMatch.length === 0) {
@@ -58,6 +62,7 @@ export class ChallengeService {
     challengeCreated.dateHourRequest = new Date();
 
     challengeCreated.status = ChallengeStatus.PENDING;
+    console.log(challengeCreated);
 
     return await challengeCreated.save();
   }
