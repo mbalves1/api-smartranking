@@ -38,11 +38,7 @@ export class ChallengeService {
     });
 
     const requererIsPlayerMatch = await createChallengeDto.players.filter(
-      (player) => {
-        console.log(player);
-
-        return player._id === createChallengeDto.requester;
-      },
+      (player) => player._id === createChallengeDto.requester,
     );
 
     if (requererIsPlayerMatch.length === 0) {
