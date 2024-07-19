@@ -42,7 +42,7 @@ export class ChallengeService {
     );
 
     if (requererIsPlayerMatch.length === 0) {
-      throw new BadRequestException('Requester is not a player');
+      throw new BadRequestException('Requesting is not a player in the match');
     }
 
     const categoryPlayer = await this.categoryService.consultPlayerCategory(
@@ -58,7 +58,6 @@ export class ChallengeService {
     challengeCreated.dateHourRequest = new Date();
 
     challengeCreated.status = ChallengeStatus.PENDING;
-    console.log(challengeCreated);
 
     return await challengeCreated.save();
   }
