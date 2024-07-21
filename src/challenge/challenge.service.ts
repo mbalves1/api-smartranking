@@ -115,10 +115,13 @@ export class ChallengeService {
     if (updateChallengeDto.status) {
       challengeFind.dateHourResponse = new Date();
     }
-    challengeFind.status = updateChallengeDto.status;
-    challengeFind.dateHourChallenge = updateChallengeDto.dateHourChallenge;
 
-    await this.challengeModel.findOneAndUpdate({ _id }, { challengeFind });
+    const updateData = {
+      status: updateChallengeDto.status,
+      dateHourChallenge: challengeFind.dateHourResponse,
+    };
+
+    await this.challengeModel.findOneAndUpdate({ _id }, updateData);
   }
 
   async assignChallengeMatch(
