@@ -160,7 +160,6 @@ export class ChallengeService {
     // challengFind.status = ChallengeStatus.REALIZED;
     // challengFind.match = result._id;
 
-    console.log(update);
     try {
       await this.challengeModel.findOneAndUpdate({ _id }, update);
     } catch (error) {
