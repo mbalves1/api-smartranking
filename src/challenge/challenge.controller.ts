@@ -46,7 +46,7 @@ export class ChallengeController {
     await this.challengeService.updateChallenge(_id, updateChallengeDto);
   }
 
-  @Post('/:challenge/partida/')
+  @Post('/:challenge/match/')
   async assignMatchChallenge(
     @Body(ValidationPipe) assignChallengeMatchDto: AssignChallengeMatchDto,
     @Param('challenge') _id: string,

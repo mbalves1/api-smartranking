@@ -134,24 +134,35 @@ export class ChallengeService {
       throw new BadRequestException('Challenge not create');
     }
 
-    //const playerFilter = challengFind.players.filter(
-    //(player) => player._id === assignChallengeMatchDto.def,
-    //);
+    // const playerFilter = challengFind.players.filter((player) => {
+    //   console.log('player', player._id);
+    //   return player._id === assignChallengeMatchDto.def;
+    // });
 
-    //if (playerFilter.length == 0) {
-    //throw new BadRequestException('Winner not belong to challenge');
-    //    }
+    // console.log('playerFilter', playerFilter);
+
+    // if (playerFilter.length == 0) {
+    //   throw new BadRequestException('Winner not belong to challenge');
+    // }
 
     const matchCreated = new this.matchModel(assignChallengeMatchDto);
-    matchCreated.category = challengFind.category;
-    matchCreated.players = challengFind.players;
+    // matchCreated.category = challengFind.category;
+    // matchCreated.players = challengFind.players;
     const result = await matchCreated.save();
 
-    challengFind.status = ChallengeStatus.REALIZED;
+    const update = {
+      category: challengFind.category,
+      players: challengFind.players,
+      match: result._id,
+      status: ChallengeStatus.REALIZED,
+    };
+
+    // challengFind.status = ChallengeStatus.REALIZED;
     // challengFind.match = result._id;
-    console.log(result);
+
+    console.log(update);
     try {
-      await this.challengeModel.findOneAndUpdate({ _id }, { challengFind });
+      await this.challengeModel.findOneAndUpdate({ _id }, update);
     } catch (error) {
       await this.matchModel.deleteOne({ _id: result._id });
       throw new BadRequestException(`Challenge ${_id} not add`);
