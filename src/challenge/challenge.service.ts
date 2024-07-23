@@ -139,15 +139,11 @@ export class ChallengeService {
     //   return player._id === assignChallengeMatchDto.def;
     // });
 
-    // console.log('playerFilter', playerFilter);
-
     // if (playerFilter.length == 0) {
     //   throw new BadRequestException('Winner not belong to challenge');
     // }
 
     const matchCreated = new this.matchModel(assignChallengeMatchDto);
-    // matchCreated.category = challengFind.category;
-    // matchCreated.players = challengFind.players;
     const result = await matchCreated.save();
 
     const update = {
@@ -156,9 +152,6 @@ export class ChallengeService {
       match: result._id,
       status: ChallengeStatus.REALIZED,
     };
-
-    // challengFind.status = ChallengeStatus.REALIZED;
-    // challengFind.match = result._id;
 
     try {
       await this.challengeModel.findOneAndUpdate({ _id }, update);
