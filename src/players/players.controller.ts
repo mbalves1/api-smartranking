@@ -37,11 +37,6 @@ export class PlayersController {
     return await this.playersService.updatePlayer(_id, updatePlayerDto);
   }
 
-  // @Get()
-  // async getPlayersAll(): Promise<Player[]> {
-  //  return await this.playersService.getAllPlayers();
-  //}
-
   @Get()
   async getPlayer(@Query('_id') _id: string): Promise<Player[] | Player> {
     if (_id) {
